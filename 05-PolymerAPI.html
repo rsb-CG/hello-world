@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Polymer API (Insertion Points using content tag)</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+		<link rel="import" href="../bower_components/polymer/polymer.html">
+	</head>
+	<body>
+		<cg-foo>
+			<p>Light DOM-0</p>
+			<p id="p1">Light DOM with id p1</p>
+			<p class="content">Light DOM with class content</p>
+			<p>Light DOM-1</p>
+			<p>Hello world- this is stage copy file</p>
+		</cg-foo>
+	</body>
+	<dom-module id="cg-foo">
+		<template>
+			<h1>Local DOM</h1>
+			<hr/>
+			<p id='p2'>Local DOM - Paragraph</p>
+			<hr/>
+			<content select=".content"></content>
+			<hr/>
+			<content select="#p1"></content>
+			<hr/>
+			<content></content>
+			<hr/>
+			<button on-click="testBtnClick">Test</button>
+		</template>
+		<script>	
+			Polymer({
+				is:'cg-foo',
+				testBtnClick:function(){
+					/*Access the First child of Light DOM*/
+					console.log(Polymer.dom(this).firstElementChild);
+					
+					/*Access the Third child of Local DOM*/
+					console.log(Polymer.dom(this.root).children[2]);
+					
+					/*We can access Local DOM nodes using querySelector($$)*/
+					console.log(Polymer.dom(this.root).querySelector('h1'));
+					/*or using the below syntax*/
+					console.log(this.$$('h1'));
+					
+					/*Automatic Node Finding Feature(selecting the elements with id in the LOCAL DOM)*/
+					var spanElement = document.createElement('span');
+					spanElement.textContent = ' : Dynamic Span';
+					Polymer.dom(this.$.p2).appendChild(spanElement);
+				}
+			});
+		</script>
+	</dom-module>
+</html>
+
+<!--
+pass the elements in Polymer.dom() to work with both Shady and Shadow DOM // recommended 
+
+-->
